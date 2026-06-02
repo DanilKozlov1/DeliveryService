@@ -14,6 +14,7 @@ namespace DeliveryService.Views
     {
         private readonly SessionService _sessionService;
         private readonly SimulationService _simulationService;
+
         public OrderAcceptView(OrderAcceptViewModel vm, SessionService sessionService, SimulationService simulationService)    
         {
             InitializeComponent();
@@ -22,7 +23,6 @@ namespace DeliveryService.Views
             _simulationService = simulationService;
             _simulationService.CourierMoved += OnCourierMoved;
             MapInitializer.CoordinatesRoute += OnRouteReceived;
-
         }
 
         private async void OnCourierMoved(double Lat, double Lon)
@@ -45,10 +45,10 @@ namespace DeliveryService.Views
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await MapInitializer.Initialize(Map);
 
             if(DataContext is OrderAcceptViewModel vm)
             {
+                await MapInitializer.Initialize(Map, vm.MapApiKey);
                 vm.CourierAssigned += AddCourierMark;
             }
 

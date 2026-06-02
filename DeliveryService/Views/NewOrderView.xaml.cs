@@ -1,4 +1,5 @@
-﻿using DeliveryService.Utils;
+﻿using DeliveryService.Services;
+using DeliveryService.Utils;
 using DeliveryService.ViewModels;
 using System.Windows;
 
@@ -33,9 +34,11 @@ namespace DeliveryService.Views
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await MapInitializer.Initialize(Map);
-            MapInitializer.AddressSelected += OnAddressSelected;
-
+            if (DataContext is NewOrderViewModel vm)
+            {
+                await MapInitializer.Initialize(Map, vm.MapApiKey);
+                MapInitializer.AddressSelected += OnAddressSelected;
+            }
         }
     }
 }

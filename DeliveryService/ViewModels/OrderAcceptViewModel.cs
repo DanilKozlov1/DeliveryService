@@ -8,10 +8,16 @@ namespace DeliveryService.ViewModels
 {
     public class OrderAcceptViewModel : BaseViewModel
     {
+        private readonly ConfigService _configService;
         private readonly WindowsService _windowService;
         private readonly SimulationService _simulationService;
         private readonly SessionService _sessionService;
         private readonly CourierService _courierService;
+
+        public string MapApiKey
+        {
+            get => _configService.GetMapApiKey();
+        }
 
         public event Func<Task>? CourierAssigned;
 
@@ -72,8 +78,10 @@ namespace DeliveryService.ViewModels
 
         public ICommand ReturnCommand { get; set; }
 
-        public OrderAcceptViewModel(WindowsService windowService, SessionService sessionService, CourierService courierService, SimulationService simulationService)
+        public OrderAcceptViewModel(ConfigService configService,
+            WindowsService windowService, SessionService sessionService, CourierService courierService, SimulationService simulationService)
         {
+            _configService = configService;
             _windowService = windowService;
             _sessionService = sessionService;
             _courierService = courierService;

@@ -11,6 +11,7 @@ namespace DeliveryService.ViewModels
     /// </summary>
     public class NewOrderViewModel : BaseViewModel
     {
+        private readonly ConfigService _configService;
         private readonly SessionService _sessionService;
 
         private readonly OrderService _orderService;
@@ -18,6 +19,11 @@ namespace DeliveryService.ViewModels
         private readonly BasketService _basketService;
         private readonly WindowsService _windowService;
         private readonly CourierService _courierService;
+
+        public string MapApiKey
+        {
+            get => _configService.GetMapApiKey();
+        }
 
         /// <summary>
         /// Имя клиента
@@ -166,9 +172,10 @@ namespace DeliveryService.ViewModels
         public ICommand LoadUserCommand { get; }
 
 
-        public NewOrderViewModel(SessionService sessionService, 
+        public NewOrderViewModel(SessionService sessionService, ConfigService configService,
             OrderService orderService, ClientService clientService, BasketService basketService, WindowsService windowService, CourierService courierService)
         {
+            _configService = configService;
             _sessionService = sessionService;
             _orderService = orderService;
             _clientService = clientService;

@@ -28,6 +28,8 @@ namespace DeliveryService
 
             var services = new ServiceCollection();
 
+            services.AddSingleton<IConfiguration>(config);
+
             // БД
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(config.GetConnectionString("Default")));
@@ -43,6 +45,8 @@ namespace DeliveryService
             // Сервисы
             services.AddSingleton<SessionService>();
             services.AddSingleton<WindowsService>();
+            services.AddSingleton<ConfigService>();
+
             services.AddScoped<SimulationService>();
             services.AddScoped<OrderService>();
             services.AddScoped<CourierService>();

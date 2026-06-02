@@ -2,7 +2,6 @@ using DeliveryService.Models;
 using DeliveryService.Services;
 using DeliveryService.Utils;
 using DeliveryService.ViewModels;
-using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,16 +22,14 @@ namespace DeliveryService.Views
         public dispatcherPage()
         {
             InitializeComponent();
-
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            await MapInitializer.Initialize(Map);
-
-
             if (DataContext is DispatcherViewModel vm)
             {
+                await MapInitializer.Initialize(Map, vm.MapApiKey);
+
                 _simulationService = vm.SimulationService;
                 vm.OrderSelected -= OnOrderSelected;
                 vm.CourierSelected -= OnCourierSelected;

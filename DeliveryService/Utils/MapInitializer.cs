@@ -29,14 +29,14 @@ namespace DeliveryService.Utils
         }
 
 
-        public static async Task Initialize(WebView2 MapWebView)
+        public static async Task Initialize(WebView2 MapWebView, string apiKey)
         {
             string html = """ 
             <!DOCTYPE html>
             <html>
             <head>
                 <meta charset="utf-8" />
-                <script src="https://api-maps.yandex.ru/2.1/?apikey=7884a1f6-e701-4ae1-bca9-d35b02adaf1e&lang=ru_RU"></script>
+                <script src="https://api-maps.yandex.ru/2.1/?apikey={{apiKey}}&lang=ru_RU"></script>
                 <style>
                     html, body, #map {
                         width: 100%;

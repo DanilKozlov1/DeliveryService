@@ -3,6 +3,11 @@
 bin/
 obj/
 
+# Configuration files
+appsettings.json
+appsettings.*.json
+!appsettings.Example.json
+
 # User files
 *.user
 *.suo

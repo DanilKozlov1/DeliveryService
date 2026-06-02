@@ -1,6 +1,7 @@
 ﻿using DeliveryService.Commands;
 using DeliveryService.Models;
 using DeliveryService.Services;
+using Microsoft.Extensions.Configuration;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
@@ -13,10 +14,17 @@ namespace DeliveryService.ViewModels
     /// </summary>
     public class DispatcherViewModel : BaseViewModel
     {
+        private readonly ConfigService _config;
+
         /// <summary>
         /// Интервал таймера
         /// </summary>
-        private const int TIMER_INTERVAL = 30; 
+        private const int TIMER_INTERVAL = 30;
+
+        public string MapApiKey 
+        {
+            get => _config.GetMapApiKey();
+        }
 
         /// <summary>
         /// Таймер, который перезагружает данные
@@ -148,8 +156,10 @@ namespace DeliveryService.ViewModels
         /// </summary>
         public event Action<double,double,double,double,double,double>? CourierSelected;
 
-        public DispatcherViewModel(OrderService orderService, CourierService courierService, SimulationService simulationService)
+        public DispatcherViewModel(ConfigService config, OrderService orderService, CourierService courierService, SimulationService simulationService)
         {
+            _config = config;
+
             _orderService = orderService;
             _courierService = courierService;
             _simulationService = simulationService;
@@ -196,6 +206,7 @@ namespace DeliveryService.ViewModels
             });
 
         }
+
 
         /// <summary>
         /// Функция, срабатывающая при достижении курьером финальной точки
