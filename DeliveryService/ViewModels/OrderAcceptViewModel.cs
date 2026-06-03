@@ -1,5 +1,6 @@
 ﻿using DeliveryService.Commands;
 using DeliveryService.Services;
+using DeliveryService.Services.Interfaces;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -8,20 +9,20 @@ namespace DeliveryService.ViewModels
 {
     public class OrderAcceptViewModel : BaseViewModel
     {
-        private readonly ConfigService _configService;
+        private readonly IConfigService _configService;
         private readonly WindowsService _windowService;
         private readonly SimulationService _simulationService;
         private readonly SessionService _sessionService;
         private readonly CourierService _courierService;
 
-        public string MapApiKey
-        {
-            get => _configService.GetMapApiKey();
-        }
-
         public event Func<Task>? CourierAssigned;
 
         public event Action? ClosedRequested;
+
+        /// <summary>
+        /// API-ключ для карты
+        /// </summary>
+        private readonly string _mapApiKey;
 
         /// <summary>
         /// Таймер, который перезагружает данные
@@ -41,12 +42,19 @@ namespace DeliveryService.ViewModels
         private string _addressFrom;
         private string _addressTo;
 
+        /// <summary>
+        /// API-ключ для карты
+        /// </summary>
+        public string MapApiKey
+        {
+            get => _mapApiKey;
+        }
+
         public string StatusMessage
         {
             get => _statusMessage;
             set => SetProperty(ref _statusMessage, value);
         }
-
 
         public string OrderNumber
         {
@@ -78,10 +86,12 @@ namespace DeliveryService.ViewModels
 
         public ICommand ReturnCommand { get; set; }
 
-        public OrderAcceptViewModel(ConfigService configService,
+        public OrderAcceptViewModel(IConfigService configService,
             WindowsService windowService, SessionService sessionService, CourierService courierService, SimulationService simulationService)
         {
             _configService = configService;
+            _mapApiKey = _configService.GetMapApiKey();
+
             _windowService = windowService;
             _sessionService = sessionService;
             _courierService = courierService;

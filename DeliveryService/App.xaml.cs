@@ -1,6 +1,7 @@
 using DeliveryService.Data;
 using DeliveryService.Repositories;
 using DeliveryService.Services;
+using DeliveryService.Services.Interfaces;
 using DeliveryService.ViewModels;
 using DeliveryService.Views;
 using Microsoft.EntityFrameworkCore;
@@ -42,10 +43,11 @@ namespace DeliveryService
             services.AddScoped<FoodCategoryRepository>();
             services.AddScoped<FoodRepository>();
             services.AddScoped<BasketRepository>();
+
             // Сервисы
             services.AddSingleton<SessionService>();
             services.AddSingleton<WindowsService>();
-            services.AddSingleton<ConfigService>();
+            services.AddSingleton<IConfigService, ConfigService>();
 
             services.AddScoped<SimulationService>();
             services.AddScoped<OrderService>();

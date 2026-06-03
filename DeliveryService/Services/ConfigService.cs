@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DeliveryService.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace DeliveryService.Services
 {
     /// <summary>
     /// Сервис конфигурации
     /// </summary>
-    public class ConfigService
+    public class ConfigService : IConfigService
     {
         /// <summary>
         /// Конфигурация проекта
@@ -19,10 +20,10 @@ namespace DeliveryService.Services
         }
 
 
-        /// <summary>
-        /// Получение API-ключа для карты
-        /// </summary>
-        /// <returns>API-ключ</returns>
-        public string GetMapApiKey() => _config.GetSection("ApiMap:Key").Value;
+        public string GetMapApiKey()
+        {
+            string? apiKey = _config.GetSection("ApiMap:Key").Value;
+            return apiKey ?? throw new InvalidOperationException("API-ключ для карты не существует в конфигурации.");
+        }
     }
 }

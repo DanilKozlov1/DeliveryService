@@ -1,7 +1,7 @@
 ﻿using DeliveryService.Commands;
 using DeliveryService.Models;
 using DeliveryService.Services;
-using Microsoft.Extensions.Configuration;
+using DeliveryService.Services.Interfaces;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
@@ -14,17 +14,16 @@ namespace DeliveryService.ViewModels
     /// </summary>
     public class DispatcherViewModel : BaseViewModel
     {
-        private readonly ConfigService _config;
+        private readonly IConfigService _configService;
 
         /// <summary>
         /// Интервал таймера
         /// </summary>
         private const int TIMER_INTERVAL = 30;
-
-        public string MapApiKey 
-        {
-            get => _config.GetMapApiKey();
-        }
+        /// <summary>
+        /// API-ключ для карты
+        /// </summary>
+        private readonly string _mapApiKey;
 
         /// <summary>
         /// Таймер, который перезагружает данные
@@ -66,7 +65,15 @@ namespace DeliveryService.ViewModels
         /// <summary>
         /// Выбранный курьер
         /// </summary>
-       
+
+        /// <summary>
+        /// API-ключ для карты
+        /// </summary>
+        public string MapApiKey
+        {
+            get => _mapApiKey;
+        }
+
         public Courier SelectedCourier
         {
             get => _selectedCourier;
@@ -156,9 +163,11 @@ namespace DeliveryService.ViewModels
         /// </summary>
         public event Action<double,double,double,double,double,double>? CourierSelected;
 
-        public DispatcherViewModel(ConfigService config, OrderService orderService, CourierService courierService, SimulationService simulationService)
+        public DispatcherViewModel(IConfigService config, 
+            OrderService orderService, CourierService courierService, SimulationService simulationService)
         {
-            _config = config;
+            _configService = config;
+            _mapApiKey = _configService.GetMapApiKey();
 
             _orderService = orderService;
             _courierService = courierService;

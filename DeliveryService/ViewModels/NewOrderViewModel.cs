@@ -1,6 +1,7 @@
 ﻿using DeliveryService.Commands;
 using DeliveryService.Models;
 using DeliveryService.Services;
+using DeliveryService.Services.Interfaces;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,7 +12,7 @@ namespace DeliveryService.ViewModels
     /// </summary>
     public class NewOrderViewModel : BaseViewModel
     {
-        private readonly ConfigService _configService;
+        private readonly IConfigService _configService;
         private readonly SessionService _sessionService;
 
         private readonly OrderService _orderService;
@@ -20,11 +21,10 @@ namespace DeliveryService.ViewModels
         private readonly WindowsService _windowService;
         private readonly CourierService _courierService;
 
-        public string MapApiKey
-        {
-            get => _configService.GetMapApiKey();
-        }
-
+        /// <summary>
+        /// API-ключ для карты
+        /// </summary>
+        private readonly string _mapApiKey;
         /// <summary>
         /// Имя клиента
         /// </summary>
@@ -76,6 +76,13 @@ namespace DeliveryService.ViewModels
         /// </summary>
         private bool _isFromMode;
 
+        /// <summary>
+        /// API-ключ для карты
+        /// </summary>
+        public string MapApiKey
+        {
+            get => _mapApiKey;
+        }
         /// <summary>
         /// Переменная, необходимая для переключения режима откуда/куда
         /// </summary>
@@ -172,10 +179,12 @@ namespace DeliveryService.ViewModels
         public ICommand LoadUserCommand { get; }
 
 
-        public NewOrderViewModel(SessionService sessionService, ConfigService configService,
+        public NewOrderViewModel(SessionService sessionService, IConfigService configService,
             OrderService orderService, ClientService clientService, BasketService basketService, WindowsService windowService, CourierService courierService)
         {
             _configService = configService;
+            _mapApiKey = _configService.GetMapApiKey();
+
             _sessionService = sessionService;
             _orderService = orderService;
             _clientService = clientService;
