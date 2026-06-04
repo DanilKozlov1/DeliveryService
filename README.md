@@ -126,8 +126,9 @@ DeliveryService/                          # корень репозитория
 Ubuntu (терминал):
 ```bash
 cp .env.example .env
-Windows (CMD или PowerShell):
 ```
+
+Windows (CMD или PowerShell):
 cmd 
 copy .env.example .env
 
@@ -137,8 +138,9 @@ copy .env.example .env
 Ubuntu (возможно, потребуется sudo):
 ```bash
 sudo docker-compose up -d
-Windows (Docker Desktop):
 ```
+
+Windows (Docker Desktop):
 cmd
 docker-compose up -d
 
