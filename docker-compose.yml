@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    build: .
+    container_name: delivery-postgres
+    ports:
+      - "${HOST_PORT}:5432"
+    volumes:
+      - pg_delivery_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    restart: unless-stopped
+
+volumes:
+  pg_delivery_data:

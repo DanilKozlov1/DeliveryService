@@ -31,7 +31,7 @@ namespace DeliveryService.Utils
 
         public static async Task Initialize(WebView2 MapWebView, string apiKey)
         {
-            string html = """ 
+            string html = $$""" 
             <!DOCTYPE html>
             <html>
             <head>

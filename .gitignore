@@ -12,6 +12,7 @@ appsettings.*.json
 *.user
 *.suo
 *.cache
+*.env
 
 # Rider / Resharper (на всякий)
 .idea/
