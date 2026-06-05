@@ -133,8 +133,11 @@ _sessionService.CurrentUserChanged += () =>
 Если симуляция уже запущена, предыдущая отменяется.
 
 **Параметры**:
+
 | Имя | Тип | Описание |
+
 | `points` | `List<List<double>>` | Список точек маршрута. Каждая точка – список из двух чисел: [широта, долгота] |
+
 | `courier` | `Courier` | Курьер, перемещение которого симулируется |
 
 **Исключения**:
@@ -159,8 +162,11 @@ _simulationService.Stop();
 **Описание**: Возникает при каждом перемещении курьера на новую точку маршрута (на каждом шаге цикла симуляции). Передаёт новые координаты курьера (широту и долготу).
 
 **Параметры события**:
+
 | Имя | Тип | Описание |
+
 | `lat` | `double` | Широта (latitude) |
+
 | `lon` | `double` | Долгота (longitude) |
 
 **Пример подписки**:
@@ -209,7 +215,9 @@ MapInitializer.Initialize(map, apiKey);
 ### Task<(List<Basket> userBasket, decimal totalPrice)> GetUserBasketAsync(int userId)
 **Описание**: Возвращает все позиции корзины указанного пользователя и их общую стоимость.
 **Параметры**:
+
 | Имя | Тип | Описание |
+
 | `userId` | `int` | ID пользователя |
 
 **Возвращает**: кортеж (List<Basket> userBasket, decimal totalPrice) – список позиций корзины и суммарная цена (сумма полей Price).
@@ -223,7 +231,9 @@ Console.WriteLine($"Всего позиций: {basket.Count}, на сумму: 
 ### Task<(List<Basket> userBasket, decimal totalPrice)> GetUserActiveBasketAsync(int userId)
 **Описание**: Возвращает только активные позиции корзины (те, которые ещё не оформлены в заказ) и их общую стоимость.
 **Параметры**:
+
 | Имя | Тип | Описание |
+
 | `userId` | `int` | ID пользователя |
 
 **Возвращает**: кортеж (List<Basket> userBasket, decimal totalPrice) – отфильтрованный список и сумма.
@@ -236,9 +246,13 @@ var (activeBasket, total) = await _basketService.GetUserActiveBasketAsync(5);
 ### Task<bool> AddNewBasketItemAsync(int userId, int foodId, int quantity)
 **Описание**: Создаёт новую запись в корзине для указанного пользователя и позиции меню.
 **Параметры**:
+
 | Имя | Тип | Описание |
+
 | `userId` | `int` | ID пользователя |
+
 | `foodId` | `int` | ID блюда из справочника |
+
 | `quantity` | `int` | Количество единиц |
 
 **Возвращает**: true, если операция успешна (блюдо найдено и запись добавлена), иначе false.
@@ -251,9 +265,13 @@ bool added = await _basketService.AddNewBasketItemAsync(1, 42, 2);
 ### Task<bool> AddOrUpdateBasketItemAsync(int userId, int foodId, int quantity)
 **Описание**: Добавляет или увеличивает количество существующей позиции в активной корзине. Если блюдо уже есть в корзине (активной) – увеличивает Quantity и пересчитывает Price. Если нет – создаёт новую запись.
 **Параметры**:
+
 | Имя | Тип | Описание |
+
 | `userId` | `int` | ID пользователя |
+
 | `foodId` | `int` | ID блюда |
+
 | `quantity` | `int` | Количество для добавления |
 
 **Возвращает**: true, если операция выполнена (блюдо найдено), иначе false.
@@ -266,7 +284,9 @@ await _basketService.AddOrUpdateBasketItemAsync(1, 42, 1); // добавит е�
 ### Task<bool> RemoveItemAsync(int basketId)
 **Описание**: Удаляет конкретную запись корзины по её идентификатору.
 **Параметры**:
+
 | Имя | Тип | Описание |
+
 | `basketId` | `int` | ID записи корзины |
 
 **Возвращает**: true, если запись существовала и была удалена; false, если запись не найдена.
@@ -279,7 +299,9 @@ await _basketService.RemoveItemAsync(10);
 ### Task ClearUserBasketAsync(int userId)
 **Описание**: Удаляет все записи корзины указанного пользователя. Обычно вызывается после оформления заказа.
 **Параметры**:
+
 | Имя | Тип | Описание |
+
 | `userId` | `int` | ID пользователя |
 
 **Возвращает**: ничего.
