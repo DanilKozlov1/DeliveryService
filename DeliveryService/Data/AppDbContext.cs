@@ -21,9 +21,7 @@ namespace DeliveryService.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // =============================================
-            // Seed: Категории
-            // =============================================
+            // Категории
             modelBuilder.Entity<Categories>().HasData(
                 new Categories { Id = 1, Name = "Все" },
                 new Categories { Id = 2, Name = "Напитки" },
@@ -31,9 +29,7 @@ namespace DeliveryService.Data
                 new Categories { Id = 4, Name = "Горячее" }
             );
 
-            // =============================================
-            // Seed: Еда (CategoriesId указывает на Id выше)
-            // =============================================
+            // Еда (CategoriesId указывает на Id выше)
             modelBuilder.Entity<Food>().HasData(
                 new Food
                 {
@@ -97,9 +93,7 @@ namespace DeliveryService.Data
                 }
             );
 
-            // =============================================
-            // Seed: Admin пользователь
-            // =============================================
+            // Admin пользователь
             modelBuilder.Entity<Client>().HasData(
                 new Client
                 {
@@ -114,5 +108,4 @@ namespace DeliveryService.Data
             );
         }
     }
-
 }
