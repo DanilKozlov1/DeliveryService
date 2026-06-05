@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace DeliveryService.Commands
 {
@@ -9,7 +7,13 @@ namespace DeliveryService.Commands
     /// </summary>
     public class RelayCommandAsync : ICommand
     {
+        /// <summary>
+        /// Выполняемая функция
+        /// </summary>
         private readonly Func<object, Task> _execute;
+        /// <summary>
+        /// Выполняемая функция
+        /// </summary>
         private readonly Func<object, bool> _canExecute;
         /// <summary>
         /// Выполняется ли сейчас команда

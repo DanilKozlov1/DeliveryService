@@ -7,13 +7,19 @@ namespace DeliveryService.Commands
     /// </summary>
     public class RelayCommand : ICommand
     {
+        /// <summary>
+        /// Выполняемая функция
+        /// </summary>
         private readonly Action<object> _execute;
+        /// <summary>
+        /// Функция, что проверяет возможность выполнения
+        /// </summary>
         private readonly Func<object, bool>? _canExecute;
 
         /// <summary>
         /// Событие, возникающее при изменении возможности выполнения команды.
         /// </summary>
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
@@ -26,7 +32,7 @@ namespace DeliveryService.Commands
             _canExecute = canExecute;
         }
 
-        public RelayCommand(Action execute, Func<bool> canExecute = null)
+        public RelayCommand(Action execute, Func<bool>? canExecute = null)
             : this(_ => execute(), _ => canExecute?.Invoke() ?? true) { }
 
 

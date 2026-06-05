@@ -52,7 +52,7 @@ namespace DeliveryService.Services
         }
 
         /// <summary>
-        /// Ивент при изменении текущего пользователя (пока что нигде не используется)
+        /// Ивент при изменении текущего пользователя
         /// </summary>
         public event Action? CurrentUserChanged; 
     }

@@ -3,16 +3,44 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryService.Data
 {
+    /// <summary>
+    /// Контекст базы данных
+    /// </summary>
     public class AppDbContext : DbContext
     {
+        /// <summary>
+        /// Таблица клиентов
+        /// </summary>
         public DbSet<Client> Clients { get; set; }
+        /// <summary>
+        /// Таблица курьеров
+        /// </summary>
         public DbSet<Courier> Couriers { get; set; }
+        /// <summary>
+        /// Таблица заказов
+        /// </summary>
         public DbSet<Order> Orders { get; set; }
+        /// <summary>
+        /// Таблица точек пути курьера
+        /// </summary>
         public DbSet<RoutePoint> RoutePoints { get; set; }
+        /// <summary>
+        /// Таблица истории статусов заказов
+        /// </summary>
         public DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
+        /// <summary>
+        /// Таблица категорий еды
+        /// </summary>
         public DbSet<Categories> Categories { get; set; }
+        /// <summary>
+        /// Таблица еды
+        /// </summary>
         public DbSet<Food> Foods { get; set; }
+        /// <summary>
+        /// Таблица объектов корзины
+        /// </summary>
         public DbSet<Basket> Baskets { get; set; }
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
