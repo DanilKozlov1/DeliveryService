@@ -2,7 +2,8 @@
 
 ## Вход в приложение
 
-```sequenceDiagram
+```mermaid
+sequenceDiagram
     participant User as Пользователь
     participant View as View (EntranceView)
     participant ViewModel as ViewModel (EntranceViewModel)
