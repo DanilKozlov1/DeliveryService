@@ -111,10 +111,10 @@ DeliveryService/                          # корень репозитория
 # Документация
 
 ## Документация API сервисов
-Описание всех публичных методов сервисов, их параметров, возвращаемых значений и исключений см. в [API-Documentation.md](`docs/API-Documentation.md`).
+Описание всех публичных методов сервисов, их параметров, возвращаемых значений и исключений см. в [API-Documentation.md](docs/API-Documentation.md).
 
 ## Документация API сервисов
-Mermaid-диаграммы сценариев использования см. в [Architecture.md](`docs/Architecture.md`).
+Mermaid-диаграммы сценариев использования см. в [Architecture.md](docs/Architecture.md).
 
 ---
 
