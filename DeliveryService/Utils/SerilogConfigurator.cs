@@ -8,7 +8,7 @@ namespace DeliveryService.Utils
     /// <summary>
     /// Класс настройки Serilog проекта
     /// </summary>
-    public static class SerilogConfiguration
+    public static class SerilogConfigurator
     {
         /// <summary>
         /// Шаблон логов

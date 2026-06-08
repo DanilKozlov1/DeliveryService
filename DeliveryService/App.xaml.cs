@@ -33,7 +33,7 @@ namespace DeliveryService
             services.AddSingleton<IConfiguration>(config);
 
             // Регистрация Serilog
-            SerilogConfiguration.ConfigureLogging(services, config);
+            SerilogConfigurator.ConfigureLogging(services, config);
 
             Log.Information("Запуск приложения DeliveryService...");
 
