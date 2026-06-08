@@ -1,5 +1,6 @@
 ﻿using DeliveryService.Views;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Windows;
 
 namespace DeliveryService.Services
@@ -9,8 +10,9 @@ namespace DeliveryService.Services
     /// </summary>
     public class WindowsService
     {
-        private readonly IServiceProvider _services;
+        private readonly ILogger<WindowsService> _logger;
 
+        private readonly IServiceProvider _services;
         private readonly SessionService _sessionService;
 
         /// <summary>
@@ -19,8 +21,10 @@ namespace DeliveryService.Services
         private readonly Dictionary<Type, Window> _openedWindows;
 
 
-        public WindowsService(IServiceProvider services, SessionService sessionService)
+        public WindowsService(ILogger<WindowsService> logger, IServiceProvider services, SessionService sessionService)
         {
+            _logger = logger;
+
             _services = services;
             _sessionService = sessionService;
 
@@ -38,12 +42,20 @@ namespace DeliveryService.Services
 
             if (_openedWindows.TryGetValue(type, out var window) && window.IsVisible)
             {
+                _logger.LogInformation("Окно {WindowName} уже открыто. Перевод фокуса на него (Активация).", type.Name);
                 window.Activate();
                 return;
             }
 
+            _logger.LogInformation("Инициализация и открытие немодального окна: {WindowName}.", type.Name);
+
             var win = _services.GetRequiredService<TView>();
-            win.Closed += (s, e) => _openedWindows.Remove(type);
+            win.Closed += (s, e) =>
+            {
+                _logger.LogInformation("Немодальное окно {WindowName} было закрыто пользователем.", type.Name);
+                _openedWindows.Remove(type);
+            };
+
             win.Show();
             _openedWindows[type] = win;
         }
@@ -54,8 +66,21 @@ namespace DeliveryService.Services
         /// <returns>Результат работы окна - DialogResult</returns>
         private bool? OpenModalWindow<TView>() where TView : Window
         {
+            var type = typeof(TView);
+            _logger.LogInformation(
+                "Открытие модального диалогового окна: {WindowName}. Основной интерфейс заблокирован.", 
+                type.Name
+            );
+
             var win = _services.GetRequiredService<TView>();
-            return win.ShowDialog();
+            
+            var result = win.ShowDialog();
+            _logger.LogInformation(
+                "Модальное окно {WindowName} закрыто. DialogResult: {Result}", 
+                type.Name, result
+            );
+
+            return result;
         }
         /// <summary>
         /// Открывает окно входа
@@ -90,6 +115,11 @@ namespace DeliveryService.Services
         /// </summary>
         public void CloseWindows()
         {
+            _logger.LogInformation(
+                "Запущена команда массового закрытия всех немодальных окон. Всего окон: {Count}", 
+                _openedWindows.Count
+            );
+
             var openedWindows = _openedWindows.Values.ToList();
             foreach (var window in openedWindows)
             {
@@ -113,7 +143,15 @@ namespace DeliveryService.Services
                 .OfType<Window>()
                 .FirstOrDefault(w => w.DataContext == target);
 
-            if (window != null) window.Close();
+            if (window != null)
+            {
+                _logger.LogInformation(
+                    "Запрос на принудительное закрытие окна для ViewModel: {ViewModelName}", 
+                    target.GetType().Name
+                );
+
+                window.Close();
+            }
         }
     }
 }

@@ -2,11 +2,13 @@ using DeliveryService.Data;
 using DeliveryService.Repositories;
 using DeliveryService.Services;
 using DeliveryService.Services.Interfaces;
+using DeliveryService.Utils;
 using DeliveryService.ViewModels;
 using DeliveryService.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Windows;
 
 namespace DeliveryService
@@ -20,7 +22,7 @@ namespace DeliveryService
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
+
 
             var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
@@ -28,13 +30,17 @@ namespace DeliveryService
 
 
             var services = new ServiceCollection();
-
             services.AddSingleton<IConfiguration>(config);
+
+            // Регистрация Serilog
+            SerilogConfiguration.ConfigureLogging(services, config);
+
+            Log.Information("Запуск приложения DeliveryService...");
 
             // БД
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(config.GetConnectionString("Default")));
-            
+
 
             // Репозитории
             services.AddScoped<OrderRepository>();
@@ -82,15 +88,46 @@ namespace DeliveryService
             //контейнер
             Services = services.BuildServiceProvider();
 
-            using var scope = Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            db.Database.Migrate();
+            try
+            {
+                using var scope = Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-            var startupScope = Services.CreateScope();
-            var win = startupScope.ServiceProvider.GetRequiredService<EntranceView>();
-            win.Closed += (_, _) => startupScope.Dispose();
-            win.Show();
+                if (db.Database.CanConnect())
+                    Log.Information("Успешное подключение к СУБД PostgreSQL.");
+                else
+                {
+                    Log.Fatal("КРИТИЧЕСКАЯ ОШИБКА: База данных PostgreSQL недоступна или строка подключения неверна.");
+                    MessageBox.Show("Ошибка запуска. Проверьте логи.", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                    
+                    Shutdown();
+                    return;
+                }
+
+                db.Database.Migrate();
+
+                var startupScope = Services.CreateScope();
+                var win = startupScope.ServiceProvider.GetRequiredService<EntranceView>();
+                win.Closed += (_, _) => startupScope.Dispose();
+                win.Show();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Критическая ошибка при инициализации базы данных.");
+                MessageBox.Show("Ошибка запуска. Проверьте логи.", "Ошибка", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Shutdown();
+            }
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            Log.Information("Приложение завершает свою работу.");
+            Thread.Sleep(100);
+            Log.CloseAndFlush();
+
+            base.OnExit(e);
         }
     }
-
 }

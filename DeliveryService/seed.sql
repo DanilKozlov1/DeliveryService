@@ -14,7 +14,7 @@ ON CONFLICT DO NOTHING;
 -- =============================================
 -- Seed: Еда
 -- =============================================
-INSERT INTO "Food" ("Title", "Description", "ImageUrl", "Weight", "CategoriesId", "Price") VALUES
+INSERT INTO "Foods" ("Title", "Description", "ImageUrl", "Weight", "CategoriesId", "Price") VALUES
     ('Кофе',     'Ароматный американо',        'pack://application:,,,/Images/coffee.png', 200, 2, 150.00),
     ('Чизкейк',  'Нежный сливочный чизкейк',   'pack://application:,,,/Images/cheesecake.png', 150, 3, 350.00),
     ('Круассан', 'Свежий слоёный круассан',    'pack://application:,,,/Images/croissant.png', 100, 3, 180.00),
