@@ -40,6 +40,10 @@ namespace DeliveryService.Utils
         /// <param name="configuration">Конфигурация проекта</param>
         public static void ConfigureLogging(IServiceCollection services, IConfiguration configuration)
         {
+            string logDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LOGS_DIRECTORY);
+            if (!Directory.Exists(logDir))
+                Directory.CreateDirectory(logDir);
+
             string logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LOGS_DIRECTORY, LOGFILE_NAME);
 
             Log.Logger = new LoggerConfiguration()
