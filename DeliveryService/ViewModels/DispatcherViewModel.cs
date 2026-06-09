@@ -339,7 +339,7 @@ namespace DeliveryService.ViewModels
         {
             SelectedCourier.Current_Lat = v1;
             SelectedCourier.Current_Lon = v2;
-            await _courierService.Update(SelectedCourier);
+            await _courierService.UpdateAsync(SelectedCourier);
         }
     }
 }

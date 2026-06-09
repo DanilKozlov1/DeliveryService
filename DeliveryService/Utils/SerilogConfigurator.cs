@@ -44,7 +44,6 @@ namespace DeliveryService.Utils
 
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
-                .MinimumLevel.Debug()
                 .WriteTo.Console(outputTemplate: OUTPUT_TEMPLATE)
                 .WriteTo.Async(a => a.File(
                     path: logFilePath,

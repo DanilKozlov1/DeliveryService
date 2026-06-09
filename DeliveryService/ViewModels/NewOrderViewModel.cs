@@ -299,7 +299,7 @@ namespace DeliveryService.ViewModels
                 return;
             }
 
-            Client? client = await _clientService.GetClientById(_sessionService.CurrentClient.Id);
+            Client? client = await _clientService.GetClientByIdAsync(_sessionService.CurrentClient.Id);
             if (client == null)
             {
                 if (!int.TryParse(ClientPhone, out int phoneNumber))

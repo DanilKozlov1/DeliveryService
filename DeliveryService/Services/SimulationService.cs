@@ -51,7 +51,7 @@ namespace DeliveryService.Services
 
                 courier.Current_Lat = lat;
                 courier.Current_Lon = lon;
-                await _courierService.Update(courier);
+                await _courierService.UpdateAsync(courier);
                 await Task.Delay(600, token);
             }
             var orderPoint = remaining.Last();
@@ -61,7 +61,7 @@ namespace DeliveryService.Services
                 if(order==null) return;
                 order.Status = "Доставлен";
                 order.Courier = null;
-                await _orderService.Update(order);
+                await _orderService.UpdateAsync(order);
                 await _orderService.AddToHistory(order, status: "Доставлен");
                 CourierFinal?.Invoke();
             }

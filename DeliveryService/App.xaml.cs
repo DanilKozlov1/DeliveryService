@@ -124,7 +124,6 @@ namespace DeliveryService
         protected override void OnExit(ExitEventArgs e)
         {
             Log.Information("Приложение завершает свою работу.");
-            Thread.Sleep(100);
             Log.CloseAndFlush();
 
             base.OnExit(e);

@@ -1,5 +1,6 @@
 ﻿using DeliveryService.Models;
 using DeliveryService.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace DeliveryService.Services
 {
@@ -8,13 +9,18 @@ namespace DeliveryService.Services
     /// </summary>
     public class ClientService
     {
+        private readonly ILogger<ClientService> _logger;
+
         private readonly ClientRepository _clientRepository;
 
 
-        public ClientService(ClientRepository clientRepository)
+        public ClientService(ILogger<ClientService> logger, ClientRepository clientRepository)
         {
+            _logger = logger;
             _clientRepository = clientRepository;
         }
+
+
         /// <summary>
         /// Добавление нового клиента в БД
         /// </summary>
@@ -22,9 +28,25 @@ namespace DeliveryService.Services
         /// <returns></returns>
         public async Task<bool> AddClientAsync(Client client)
         {
-            if (client == null) return false;
-            await _clientRepository.AddAsync(client);
-            return true;
+            if (client == null)
+            {
+                _logger.LogWarning("Попытка добавления клиента с null-объектом.");
+                return false;
+            }
+
+            _logger.LogInformation("Добавление нового клиента: {ClientName}", client.Name);
+
+            try
+            {
+                await _clientRepository.AddAsync(client);
+                _logger.LogInformation("Клиент {ClientName} успешно добавлен.", client.Name);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при добавлении клиента {ClientName}", client.Name);
+                return false;
+            }
         }
 
         /// <summary>
@@ -32,14 +54,29 @@ namespace DeliveryService.Services
         /// </summary>
         /// <param name="userId">ID клиента</param>
         /// <returns>Клиент. Если был не найден то null</returns>
-        public async Task<Client?> GetClientById(int userId)
+        public async Task<Client?> GetClientByIdAsync(int userId)
         {
-            Client? client = await _clientRepository.GetById(userId);
+            _logger.LogDebug("Запрос клиента по ID: {UserId}", userId);
+            try
+            {
+                var client = await _clientRepository.GetById(userId);
 
-            if (client == null)
+                if (client == null)
+                {
+                    _logger.LogWarning("Клиент с ID {UserId} не найден.", userId);
+                    return null;
+                }
+                
+                _logger.LogDebug("Клиент {UserId} найден: {ClientName}", userId, client.Name);
+                return client;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при получении клиента по ID {UserId}", userId);
                 return null;
-            return client;
+            }
         }
+
         /// <summary>
         /// Получение клиента по Name
         /// </summary>
@@ -47,11 +84,26 @@ namespace DeliveryService.Services
         /// <returns>Клиент. Если был не найден то null</returns>
         public async Task<Client?> GetClientByName(string name)
         {
-            Client? client = await _clientRepository.GetByName(name);
+            _logger.LogDebug("Запрос клиента по Name: {name}", name);
 
-            if (client == null)
+            try
+            {
+                Client? client = await _clientRepository.GetByName(name);
+
+                if (client == null)
+                {
+                    _logger.LogWarning("Клиент с таким {name} не найден.", name);
+                    return null;
+                }
+
+                _logger.LogDebug("Клиент найден: {ClientName}", client.Name);
+                return client;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при получении клиента по Name {name}", name);
                 return null;
-            return client;
+            }
         }
     }
 }
