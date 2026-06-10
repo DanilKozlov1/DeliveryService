@@ -70,7 +70,6 @@ namespace DeliveryService
             services.AddTransient<NewOrderViewModel>();
             services.AddTransient<RegistrationCourierModel>();
             services.AddTransient<DispatcherViewModel>();
-            services.AddTransient<MenuViewModel>();
             services.AddTransient<EntranceViewModel>();
             services.AddTransient<RegistrationViewModel>();
             services.AddTransient<MenuViewModel>();

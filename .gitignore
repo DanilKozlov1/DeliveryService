@@ -3,6 +3,10 @@
 bin/
 obj/
 
+# Папки с резервными копиями и загруженными файлами
+backups/
+uploads/
+
 # Configuration files
 appsettings.json
 appsettings.*.json
