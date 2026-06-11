@@ -5,14 +5,22 @@ namespace DeliveryService.Services
 {
     public class SimulationService
     {
-
         private readonly CourierService _courierService;
         private readonly SessionService _sessionService;
         private readonly OrderService _orderService;
+
+        /// <summary>
+        /// Токен отмены симуляции
+        /// </summary>
         private CancellationTokenSource? _simulationCts;
 
+        /// <summary>
+        /// Событие при движении курьера
+        /// </summary>
         public event Action<double, double>? CourierMoved;
-            
+        /// <summary>
+        /// Событие когда курьер достигает конца пути
+        /// </summary>
         public event Action? CourierFinal;
 
 

@@ -23,7 +23,7 @@ namespace DeliveryService.Repositories
         /// </summary>
         /// <param name="courierId">ID курьера</param>
         /// <returns>Курьер</returns>
-        public async Task<Courier?> GetById(int courierId) => await _context.Couriers.FindAsync(courierId);
+        public async Task<Courier?> GetByIdAsync(int courierId) => await _context.Couriers.FindAsync(courierId);
 
         /// <summary>
         /// Получение всех курьеров
@@ -40,7 +40,7 @@ namespace DeliveryService.Repositories
         /// Получение всех активных курьеров
         /// </summary>
         /// <returns>Список курьеров, у которых IsActive равен True</returns>
-        public async Task<List<Courier>> GetActive()
+        public async Task<List<Courier>> GetActiveAsync()
         {
             return await _context.Couriers
                 .Where(c => c.IsActive)
@@ -52,7 +52,7 @@ namespace DeliveryService.Repositories
         /// Получение всех свободных от заказов курьеров
         /// </summary>
         /// <returns>Список курьеров, у которых нет активных заказов</returns>
-        public async Task<List<Courier>> GetFreeCouriers()
+        public async Task<List<Courier>> GetFreeCouriersAsync()
         {
             return await _context.Couriers
                 .Where(c => c.IsActive)
@@ -84,7 +84,7 @@ namespace DeliveryService.Repositories
         /// Переключение статуса IsActive 
         /// </summary>
         /// <param name="courierId">ID курьера</param>
-        public async Task ToggleOnline(int courierId)
+        public async Task ToggleOnlineAsync(int courierId)
         {
             var courier = await _context.Couriers.FindAsync(courierId);
 

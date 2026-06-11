@@ -7,6 +7,9 @@ using System.Windows.Threading;
 
 namespace DeliveryService.ViewModels
 {
+    /// <summary>
+    /// Логика для OrderAcceptView
+    /// </summary>
     public class OrderAcceptViewModel : BaseViewModel
     {
         private readonly IConfigService _configService;
@@ -14,10 +17,6 @@ namespace DeliveryService.ViewModels
         private readonly SimulationService _simulationService;
         private readonly SessionService _sessionService;
         private readonly CourierService _courierService;
-
-        public event Func<Task>? CourierAssigned;
-
-        public event Action? ClosedRequested;
 
         /// <summary>
         /// API-ключ для карты
@@ -36,10 +35,21 @@ namespace DeliveryService.ViewModels
         /// Статус заказа
         /// </summary>
         private string _status;
-
+        /// <summary>
+        /// Сообщение об статусе
+        /// </summary>
         private string _statusMessage;
+        /// <summary>
+        /// Номер заказа
+        /// </summary>
         private string _orderNumber;
+        /// <summary>
+        /// Адрес откуда
+        /// </summary>
         private string _addressFrom;
+        /// <summary>
+        /// Адрес куда
+        /// </summary>
         private string _addressTo;
 
         /// <summary>
@@ -50,31 +60,6 @@ namespace DeliveryService.ViewModels
             get => _mapApiKey;
         }
 
-        public string StatusMessage
-        {
-            get => _statusMessage;
-            set => SetProperty(ref _statusMessage, value);
-        }
-
-        public string OrderNumber
-        {
-            get => _orderNumber;
-            set => SetProperty(ref _orderNumber, value);
-        }
-
-
-        public string AddressFrom
-        {
-            get => _addressFrom;
-            set => SetProperty(ref _addressFrom, value);    
-        }
-
-        public string AddressTo
-        {
-            get => _addressTo;
-            set => SetProperty(ref _addressTo, value);
-        }
-
         /// <summary>
         /// Статус заказа
         /// </summary>
@@ -83,8 +68,53 @@ namespace DeliveryService.ViewModels
             get => _status;
             set => SetProperty(ref _status, value);
         }
+        /// <summary>
+        /// Сообщение об статусе
+        /// </summary>
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => SetProperty(ref _statusMessage, value);
+        }
+        /// <summary>
+        /// Номер заказа
+        /// </summary>
+        public string OrderNumber
+        {
+            get => _orderNumber;
+            set => SetProperty(ref _orderNumber, value);
+        }
+        /// <summary>
+        /// Адрес откуда
+        /// </summary>
+        public string AddressFrom
+        {
+            get => _addressFrom;
+            set => SetProperty(ref _addressFrom, value);    
+        }
+        /// <summary>
+        /// Адрес куда
+        /// </summary>
+        public string AddressTo
+        {
+            get => _addressTo;
+            set => SetProperty(ref _addressTo, value);
+        }
 
+        /// <summary>
+        /// Команда возвращения на превыдущее окно
+        /// </summary>
         public ICommand ReturnCommand { get; set; }
+
+        /// <summary>
+        /// Событие, когда курьер назначается на заказ
+        /// </summary>
+        public event Func<Task>? CourierAssigned;
+        /// <summary>
+        /// Событие, нужное для закрывания окна
+        /// </summary>
+        public event Action? ClosedRequested;
+
 
         public OrderAcceptViewModel(IConfigService configService,
             WindowsService windowService, SessionService sessionService, CourierService courierService, SimulationService simulationService)
@@ -108,11 +138,18 @@ namespace DeliveryService.ViewModels
 
         }
 
+
+        /// <summary>
+        /// Изменение статуса заказа на "Ваш заказ доставлен!"
+        /// </summary>
         private void ChangeStatus()
         {
             StatusMessage = "Ваш заказ доставлен!";
         }
 
+        /// <summary>
+        /// Возвращение в MenuView
+        /// </summary>
         private async Task ReturnToMenu()
         {
             _windowService.OpenMenu();
@@ -130,6 +167,9 @@ namespace DeliveryService.ViewModels
             _refreshTimer.Start();
         }
 
+        /// <summary>
+        /// Обновление данных об курьере
+        /// </summary>
         private async void OnTimerTick(object? sender, EventArgs e)
         {
 

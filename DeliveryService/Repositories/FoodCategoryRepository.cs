@@ -23,12 +23,14 @@ namespace DeliveryService.Repositories
         /// </summary>
         /// <param name="categoryId">ID категории</param>
         /// <returns>Категория еды с указаным id</returns>
-        public async Task<Categories?> GetById(int categoryId) => await _context.Categories.FindAsync(categoryId);
+        public async Task<Categories?> GetByIdAsync(int categoryId) => await _context.Categories.FindAsync(categoryId);
+
         /// <summary>
         /// Получение всех категорий еды
         /// </summary>
         /// <returns>Список категорий еды</returns>
         public async Task<List<Categories>> GetAllAsync() => await _context.Categories.ToListAsync();
+
         /// <summary>
         /// Добавление категории еды
         /// </summary>
@@ -38,6 +40,7 @@ namespace DeliveryService.Repositories
             await _context.Categories.AddAsync(categories);
             await _context.SaveChangesAsync();
         }
+
         /// <summary>
         /// Обновление категории еды в базе данных
         /// </summary>
@@ -48,6 +51,7 @@ namespace DeliveryService.Repositories
             _context.Update(categories);
             await _context.SaveChangesAsync();
         }
+
         /// <summary>
         /// Удаление категории еды
         /// </summary>

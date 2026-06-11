@@ -7,11 +7,13 @@ using System.Windows.Input;
 
 namespace DeliveryService.ViewModels
 {
+    /// <summary>
+    /// Логика для RegistrationView
+    /// </summary>
     public class RegistrationViewModel : BaseViewModel
     {
-
-        public event Action? RegistrationSuccess;
-
+        private readonly WindowsService _windowService;
+        private readonly ClientService _clientService;
 
         /// <summary>
         /// Имя
@@ -65,19 +67,17 @@ namespace DeliveryService.ViewModels
             get => _password;
             set => SetProperty(ref _password, value);
         }
-        /// <summary>
-        /// Сервис клиента
-        /// </summary>
-        private ClientService _clientService;
+        
         /// <summary>
         /// Команда для кнопки регистрации
         /// </summary>
         public ICommand RegistrationCommand { get; }
-        /// <summary>
-        /// Сервис для открытия окон
-        /// </summary>
 
-        private readonly WindowsService _windowService;
+        /// <summary>
+        /// Событие, если регистрация прошла успешно
+        /// </summary>
+        public event Action? RegistrationSuccess;
+
 
         public RegistrationViewModel(ClientService clientService, WindowsService windowService)
         {
@@ -90,25 +90,23 @@ namespace DeliveryService.ViewModels
                 canExecute: () => !IsBusy
             );
         }
+
+
         /// <summary>
         /// Создание юзера и сохранение в базу данных
         /// </summary>
         private async Task SaveUserAsync()
         {
-
             ErrorMessage = null;
 
             if (!ValidateProperty())
                 return;
-
             if (!ValidatePhoneNumber())
                 return;
-
 
             if (!long.TryParse(PhoneNumber, out long phoneNumber))
             {
                 ErrorMessage = "Номер телефона должен содержать только цифры";
-
                 return;
             }
 
@@ -138,6 +136,7 @@ namespace DeliveryService.ViewModels
 
             }
         }
+
         /// <summary>
         /// Проверка валидации
         /// </summary>
@@ -168,6 +167,10 @@ namespace DeliveryService.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Проверка валидации номера телефона
+        /// </summary>
+        /// <returns>True - если валиден, False - если нет</returns>
         private bool ValidatePhoneNumber()
         {
             if (string.IsNullOrWhiteSpace(PhoneNumber))
@@ -195,6 +198,11 @@ namespace DeliveryService.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Проверка валидации почты
+        /// </summary>
+        /// <param name="email">Почта</param>
+        /// <returns>True - если валиден, False - если нет</returns>
         public static bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))

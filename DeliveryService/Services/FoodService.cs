@@ -31,7 +31,7 @@ namespace DeliveryService.Services
             _logger.LogDebug("Запрос блюда по ID {FoodId}", foodId);
             try
             {
-                return await _foodRepository.GetById(foodId);
+                return await _foodRepository.GetByIdAsync(foodId);
             }
             catch (Exception ex)
             {

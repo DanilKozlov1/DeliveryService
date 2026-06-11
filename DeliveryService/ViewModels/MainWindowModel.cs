@@ -14,6 +14,32 @@ namespace DeliveryService.ViewModels
         private readonly SessionService _sessionService;
 
         /// <summary>
+        /// Текущее окно
+        /// </summary>
+        private object _currentView;
+        private readonly DispatcherViewModel _dispatcherVm;
+        private readonly OrderListViewModel _ordersVm;
+        private readonly ListCouriersViewModel _couriersVm;
+
+        /// <summary>
+        /// Текущее окно
+        /// </summary>
+        public object CurrentView
+        {
+            get => _currentView;
+            set
+            {
+                switch (value)
+                {
+                    case OrderListViewModel o: _dispatcherVm.TimerStop(); o.LoadOrdersCommand.Execute(null); break;
+                    case DispatcherViewModel d: _dispatcherVm.TimerStart(); d.LoadDataCommand.Execute(null); break;
+                    case ListCouriersViewModel d: _dispatcherVm.TimerStop(); d.LoadCouriersCommand.Execute(null); break;
+                }
+                SetProperty(ref _currentView, value);
+            }
+        }
+
+        /// <summary>
         /// Команда открытия DispatcherView
         /// </summary>
         public ICommand OpenDispatcherCommand { get; }
@@ -39,25 +65,7 @@ namespace DeliveryService.ViewModels
         public ICommand CloseWindowsCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        private object _currentView;
-        private readonly DispatcherViewModel _dispatcherVm;
-        private readonly OrderListViewModel _ordersVm;
-        private readonly ListCouriersViewModel _couriersVm;
-
         public event Action CloseRequested;
-        public object CurrentView
-        {
-            get => _currentView;
-            set {
-                switch (value)
-                {
-                    case OrderListViewModel o: _dispatcherVm.TimerStop(); o.LoadOrdersCommand.Execute(null); break;
-                    case DispatcherViewModel d: _dispatcherVm.TimerStart(); d.LoadDataCommand.Execute(null); break;
-                    case ListCouriersViewModel d: _dispatcherVm.TimerStop(); d.LoadCouriersCommand.Execute(null); break;
-                }
-                SetProperty(ref _currentView, value);
-                }
-        }
 
 
         public MainWindowModel(
@@ -114,7 +122,6 @@ namespace DeliveryService.ViewModels
         /// <summary>
         /// Выход из аккаунта
         /// </summary>
-        /// <returns></returns>
         private async Task Logout()
         {
             _sessionService.CurrentClient = null;

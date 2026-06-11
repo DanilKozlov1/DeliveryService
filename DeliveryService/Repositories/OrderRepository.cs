@@ -24,16 +24,14 @@ namespace DeliveryService.Repositories
         /// <param name="orderId">ID заказа</param>
         /// <returns>Заказ</returns>
         /// 
-
-        public async Task<Order?> GetById(int orderId) => await _context.Orders.FindAsync(orderId);
-
+        public async Task<Order?> GetByIdAsync(int orderId) => await _context.Orders.FindAsync(orderId);
 
         /// <summary>
         /// Получение заказа по айди курьера
         /// </summary>
         /// <param name="courierId">айди курьера</param>
         /// <returns></returns>
-        public async Task<Order?> GetByCourierId(int courierId) => await _context.Orders.FirstOrDefaultAsync(x=>x.CourierId == courierId);
+        public async Task<Order?> GetByCourierIdAsync(int courierId) => await _context.Orders.FirstOrDefaultAsync(x=>x.CourierId == courierId);
 
         /// <summary>
         /// Получение всех заказов
@@ -105,6 +103,5 @@ namespace DeliveryService.Repositories
             await _context.OrderStatusHistories.AddAsync(history);
             await _context.SaveChangesAsync();
         }
-
     }
 }

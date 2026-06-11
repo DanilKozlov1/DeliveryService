@@ -69,7 +69,7 @@ namespace DeliveryService.Services
             _logger.LogDebug("Запрос заказа по ID {OrderId}", id);
             try
             {
-                return await _orderRepository.GetById(id);
+                return await _orderRepository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ namespace DeliveryService.Services
             _logger.LogInformation("Изменение статуса заказа {OrderId} на '{NewStatus}'", orderId, newStatus);
             try
             {
-                var order = await _orderRepository.GetById(orderId);
+                var order = await _orderRepository.GetByIdAsync(orderId);
                 if (order == null)
                 {
                     _logger.LogWarning("Заказ {OrderId} не найден при попытке изменить статус", orderId);
@@ -172,7 +172,7 @@ namespace DeliveryService.Services
             _logger.LogInformation("Отмена заказа {OrderId}", orderId);
             try
             {
-                var order = await _orderRepository.GetById(orderId);
+                var order = await _orderRepository.GetByIdAsync(orderId);
                 if (order == null)
                 {
                     _logger.LogWarning("Заказ {OrderId} не найден при попытке отмены", orderId);
@@ -209,7 +209,7 @@ namespace DeliveryService.Services
             _logger.LogDebug("Поиск заказа по курьеру {CourierId}", courierId);
             try
             {
-                return await _orderRepository.GetByCourierId(courierId);
+                return await _orderRepository.GetByCourierIdAsync(courierId);
             }
             catch (Exception ex)
             {
@@ -228,7 +228,7 @@ namespace DeliveryService.Services
             _logger.LogInformation("Удаление заказа {OrderId}", orderId);
             try
             {
-                var order = await _orderRepository.GetById(orderId);
+                var order = await _orderRepository.GetByIdAsync(orderId);
                 if (order == null)
                 {
                     _logger.LogWarning("Заказ {OrderId} не найден для удаления", orderId);

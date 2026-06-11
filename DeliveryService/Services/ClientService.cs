@@ -59,7 +59,7 @@ namespace DeliveryService.Services
             _logger.LogDebug("Запрос клиента по ID: {UserId}", userId);
             try
             {
-                var client = await _clientRepository.GetById(userId);
+                var client = await _clientRepository.GetByIdAsync(userId);
 
                 if (client == null)
                 {
@@ -82,13 +82,13 @@ namespace DeliveryService.Services
         /// </summary>
         /// <param name="name">Логин клиента</param>
         /// <returns>Клиент. Если был не найден то null</returns>
-        public async Task<Client?> GetClientByName(string name)
+        public async Task<Client?> GetClientByNameAsync(string name)
         {
             _logger.LogDebug("Запрос клиента по Name: {name}", name);
 
             try
             {
-                Client? client = await _clientRepository.GetByName(name);
+                Client? client = await _clientRepository.GetByNameAsync(name);
 
                 if (client == null)
                 {

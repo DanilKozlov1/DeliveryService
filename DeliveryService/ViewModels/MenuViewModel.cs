@@ -11,7 +11,6 @@ namespace DeliveryService.ViewModels
     /// </summary>
     public class MenuViewModel : BaseViewModel, IDisposable
     {
-        private string _userName;
         private readonly WindowsService _windowsService;
         private readonly SessionService _sessionService;
 
@@ -19,12 +18,10 @@ namespace DeliveryService.ViewModels
         private readonly FoodService _foodService;
         private readonly BasketService _basketService;
 
-
         /// <summary>
-        /// Событие, нужное для закрывания окна
+        /// Имя текущего пользователя
         /// </summary>
-        public event Action? CloseRequested;
-
+        private string _userName;
 
         /// <summary>
         /// Список категорий
@@ -42,8 +39,6 @@ namespace DeliveryService.ViewModels
         /// Полная сумма
         /// </summary>
         private decimal _totalPrice;
-
-       
 
         /// <summary>
         /// Список категорий
@@ -107,12 +102,15 @@ namespace DeliveryService.ViewModels
         /// Команда создания заказа
         /// </summary>
         public ICommand CreateOrderCommand { get; }
-
         /// <summary>
         /// Команда выхода из аккаунта
         /// </summary>
         public ICommand LogoutCommand { get; }
 
+        /// <summary>
+        /// Событие, нужное для закрывания окна
+        /// </summary>
+        public event Action? CloseRequested;
 
 
         public MenuViewModel(WindowsService windowsService, SessionService sessionService,
@@ -210,6 +208,7 @@ namespace DeliveryService.ViewModels
             var list = await _categoryService.GetAllAsync();
             FillList(Categories, list);
         }
+
         /// <summary>
         /// Загрузка всех объектов еды
         /// </summary>
@@ -218,6 +217,7 @@ namespace DeliveryService.ViewModels
             var items = await _foodService.GetAllAsync();
             FillList(MenuItems, items);
         }
+
         /// <summary>
         /// Загрузка объектов еды по категории
         /// </summary>
@@ -227,6 +227,7 @@ namespace DeliveryService.ViewModels
             var items = await _foodService.GetAllFromCategoryAsync(categoryId);
             FillList(MenuItems, items);
         }
+
         /// <summary>
         /// Загрузка объектов корзины
         /// </summary>
@@ -237,6 +238,7 @@ namespace DeliveryService.ViewModels
             FillList(BasketItems, userBasket);
             TotalPrice = totalPrice;
         }
+
         /// <summary>
         /// Добавление в корзину
         /// </summary>
@@ -250,6 +252,7 @@ namespace DeliveryService.ViewModels
             else
                 ErrorMessage = "Не удалось добавить товар в корзину";
         }
+
         /// <summary>
         /// Удаление из корзины
         /// </summary>
@@ -262,6 +265,7 @@ namespace DeliveryService.ViewModels
             else
                 ErrorMessage = "Не удалось удалить из корзины";
         }
+
         /// <summary>
         /// Загрузка данных
         /// </summary>
@@ -273,6 +277,7 @@ namespace DeliveryService.ViewModels
             if (_sessionService.CurrentClient != null)
                 await LoadBasketAsync();
         }
+
         /// <summary>
         /// Перезагрузка при изменении текущего пользователя
         /// </summary>
@@ -281,6 +286,7 @@ namespace DeliveryService.ViewModels
             if(IsBusy) return;
             await LoadDataAsync();
         }
+
         /// <summary>
         /// Открытие окна NewOrderView для создания заказа
         /// </summary>

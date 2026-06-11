@@ -4,16 +4,20 @@ using System.Windows.Input;
 
 namespace DeliveryService.ViewModels
 {
+    /// <summary>
+    /// Логика взаимодействия пользователя с базой данных для входа в приложение
+    /// </summary>
     public class AuthorizationViewModel : BaseViewModel
     {
+        private readonly WindowsService _windowsService;
+
+        private readonly EntranceViewModel _entranceViewModel;
+        private readonly RegistrationViewModel _registrationViewModel;
+        
         /// <summary>
         /// Текущее view
         /// </summary>
         private object _currentView;
-
-        private readonly EntranceViewModel _entranceViewModel;
-        private readonly RegistrationViewModel _registrationViewModel;
-        private readonly WindowsService _windowsService;
 
         /// <summary>
         /// Текущее view
@@ -37,6 +41,7 @@ namespace DeliveryService.ViewModels
         /// </summary>
         public ICommand CloseCommand { get; }
 
+
         public AuthorizationViewModel(
             EntranceViewModel EntViewModel,
             RegistrationViewModel RegistrationViewModel,
@@ -55,8 +60,6 @@ namespace DeliveryService.ViewModels
             LoginCommand = new RelayCommand(() => CurrentView = _entranceViewModel);
             RegCommand = new RelayCommand(() => CurrentView = _registrationViewModel);
             CloseCommand = new RelayCommand(() => _windowsService.CloseWindow(this));
-
         }
     }
 }
-

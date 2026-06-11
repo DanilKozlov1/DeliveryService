@@ -186,6 +186,7 @@ namespace DeliveryService.ViewModels
             PendingCount = orders.Count(o => o.Status == "Новый");
             CompletedCount = orders.Count(o => o.Status == "Доставлен");
         }
+
         /// <summary>
         /// Загрузка данных о заказах в список
         /// </summary>
@@ -215,6 +216,7 @@ namespace DeliveryService.ViewModels
 
             SetOrderStatistic(Orders);
         }
+
         /// <summary>
         /// Загрузка данных о курьерах
         /// </summary>
@@ -235,6 +237,7 @@ namespace DeliveryService.ViewModels
             }
             Couriers = list;
         }
+
         /// <summary>
         /// Загрузка данных
         /// </summary>
@@ -243,6 +246,7 @@ namespace DeliveryService.ViewModels
             await LoadOrdersAsync();
             await LoadCouriersAsync();
         }
+
         /// <summary>
         /// Загрузка списка заказов с учётом фильтрации по имени клиента или ардресам откуда и куда
         /// </summary>
@@ -266,6 +270,10 @@ namespace DeliveryService.ViewModels
             SetOrderStatistic(Orders);
         }
 
+        /// <summary>
+        /// Удаление заказа
+        /// </summary>
+        /// <param name="id">Id заказа</param>
         private async Task RemoveOrderAsync(object id)
         {
             if (IsBusy) return;

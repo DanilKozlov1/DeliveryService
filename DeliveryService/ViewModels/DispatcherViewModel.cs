@@ -10,7 +10,7 @@ using System.Windows.Threading;
 namespace DeliveryService.ViewModels
 {
     /// <summary>
-    /// Логика взаимодействия пользователя и базы данных с DispatcherView
+    /// Логика взаимодействия пользователя и базы данных с DispatcherPage
     /// </summary>
     public class DispatcherViewModel : BaseViewModel
     {
@@ -38,9 +38,6 @@ namespace DeliveryService.ViewModels
         private readonly CourierService _courierService;
         private SimulationService _simulationService;
 
-        public event Action? DisposeRequested;
-        
-
         // ВАЖНО: Поменять названия статусов в комментариях
         /// <summary>
         /// Счётчик заказов со статусом "New"
@@ -62,9 +59,6 @@ namespace DeliveryService.ViewModels
         /// Выбранный курьер
         /// </summary>
         private Courier _selectedCourier;
-        /// <summary>
-        /// Выбранный курьер
-        /// </summary>
 
         /// <summary>
         /// API-ключ для карты
@@ -73,7 +67,9 @@ namespace DeliveryService.ViewModels
         {
             get => _mapApiKey;
         }
-
+        /// <summary>
+        /// Выбранный курьер
+        /// </summary>
         public Courier SelectedCourier
         {
             get => _selectedCourier;
@@ -154,6 +150,7 @@ namespace DeliveryService.ViewModels
         /// </summary>
         public ICommand SelectCourierCommand { get; }
 
+        public event Action? DisposeRequested;
         /// <summary>
         /// Событие, которое вызывается при выборе заказа 
         /// </summary>
@@ -162,6 +159,7 @@ namespace DeliveryService.ViewModels
         /// Событие, которое вызывается при выборе курьера 
         /// </summary>
         public event Action<double,double,double,double,double,double>? CourierSelected;
+
 
         public DispatcherViewModel(IConfigService config, 
             OrderService orderService, CourierService courierService, SimulationService simulationService)
@@ -176,7 +174,7 @@ namespace DeliveryService.ViewModels
             ActiveOrders = new ObservableCollection<Order>();
             OnlineCouriers = new ObservableCollection<Courier>();
             FreeCouriers = new ObservableCollection<Courier>();
-            _simulationService.CourierFinal += _simulationService_CourierFinal;
+            _simulationService.CourierFinal += CourierFinal;
 
             LoadDataCommand = new RelayCommandAsync(
                 execute: () => TryRunTaskAsync(LoadDataAsync, "Ошибка загрузки"),
@@ -220,7 +218,7 @@ namespace DeliveryService.ViewModels
         /// <summary>
         /// Функция, срабатывающая при достижении курьером финальной точки
         /// </summary>
-        private void _simulationService_CourierFinal()=> LoadDataCommand.Execute(null);
+        private void CourierFinal()=> LoadDataCommand.Execute(null);
 
         /// <summary>
         /// Загрузка данных о заказах
@@ -304,6 +302,7 @@ namespace DeliveryService.ViewModels
             await LoadCouriersAsync();
             await LoadFreeCouriersAsync();
         }
+
         /// <summary>
         /// Старт таймера
         /// </summary>
@@ -316,6 +315,7 @@ namespace DeliveryService.ViewModels
             _refreshTimer.Start();
             _isTimerActive = true;
         }
+        
         /// <summary>
         /// Остановка таймера
         /// </summary>

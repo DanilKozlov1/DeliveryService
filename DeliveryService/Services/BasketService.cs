@@ -36,7 +36,7 @@ namespace DeliveryService.Services
             _logger.LogDebug("Запрос позиции корзины по ID {BasketId}", basketId);
             try
             {
-                return await _basketRepository.GetById(basketId);
+                return await _basketRepository.GetByIdAsync(basketId);
             }
             catch (Exception ex)
             {
@@ -112,7 +112,7 @@ namespace DeliveryService.Services
             );
             try
             {
-                var food = await _foodRepository.GetById(foodId);
+                var food = await _foodRepository.GetByIdAsync(foodId);
                 if (food == null)
                 {
                     _logger.LogWarning("Блюдо {FoodId} не найдено при добавлении в корзину пользователя {UserId}", foodId, userId);
@@ -159,14 +159,14 @@ namespace DeliveryService.Services
             );
             try
             {
-                var food = await _foodRepository.GetById(foodId);
+                var food = await _foodRepository.GetByIdAsync(foodId);
                 if (food == null)
                 {
                     _logger.LogWarning("Блюдо {FoodId} не найдено при обновлении корзины пользователя {UserId}", foodId, userId);
                     return false;
                 }
 
-                var existingItem = await _basketRepository.GetActiveByUserAndFoodId(userId, foodId);
+                var existingItem = await _basketRepository.GetActiveByUserAndFoodIdAsync(userId, foodId);
                 if (existingItem != null)
                 {
                     existingItem.Quantity += quantity;
@@ -216,7 +216,7 @@ namespace DeliveryService.Services
             _logger.LogInformation("Удаление позиции корзины: BasketId={BasketId}", basketId);
             try
             {
-                var item = await _basketRepository.GetById(basketId);
+                var item = await _basketRepository.GetByIdAsync(basketId);
                 if (item == null)
                 {
                     _logger.LogWarning("Позиция корзины {BasketId} не найдена для удаления", basketId);

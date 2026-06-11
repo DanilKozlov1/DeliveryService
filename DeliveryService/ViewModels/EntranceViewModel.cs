@@ -5,13 +5,15 @@ using System.Windows.Input;
 
 namespace DeliveryService.ViewModels
 {
+    /// <summary>
+    /// Логика для EntranceView
+    /// </summary>
     public class EntranceViewModel : BaseViewModel
     {
         private readonly SessionService _sessionService;
-        /// <summary>
-        /// Событие, нужное для закрывания окна
-        /// </summary>
-        public event Action? CloseRequested;
+
+        private readonly ClientService _clientService;
+        private readonly WindowsService _windowService;
 
         /// <summary>
         /// Имя
@@ -38,7 +40,6 @@ namespace DeliveryService.ViewModels
             get => _role;
             set=> SetProperty(ref _role, value);
         }
-
         /// <summary>
         /// Юзер, который входит в систему
         /// </summary>
@@ -47,7 +48,6 @@ namespace DeliveryService.ViewModels
             get => _client;
             set => SetProperty(ref _client, value);
         }
-
         /// <summary>
         /// Имя
         /// </summary>
@@ -65,19 +65,15 @@ namespace DeliveryService.ViewModels
             set => SetProperty(ref _password, value);
         }
 
-        /// <summary>
-        /// Клиент сервис
-        /// </summary>
-        private readonly ClientService _clientService;
-        /// <summary>
-        /// Сервис для открытия окон
-        /// </summary>
-        private readonly WindowsService _windowService;
-
        /// <summary>
        /// Команда для авторизации
        /// </summary>
         public ICommand LoginCommand { get; }
+
+        /// <summary>
+        /// Событие, нужное для закрывания окна
+        /// </summary>
+        public event Action? CloseRequested;
 
 
         public EntranceViewModel(ClientService clientService, WindowsService windowService, SessionService sessionService)
@@ -88,21 +84,18 @@ namespace DeliveryService.ViewModels
             _sessionService = sessionService;
 
             LoginCommand = new RelayCommandAsync(
-                execute: () => TryRunTaskAsync(CheckAndAuthClient, "Ошибка аунтефикации"),
+                execute: () => TryRunTaskAsync(CheckAndAuthClientAsync, "Ошибка аунтефикации"),
                 canExecute: () => !IsBusy
             );
-
-
         }
+
 
         /// <summary>
         /// Проверка и аунтефикация пользователя
         /// </summary>
-        /// <returns></returns>
-        private async Task CheckAndAuthClient()
+        private async Task CheckAndAuthClientAsync()
         {
-
-            Client = await _clientService.GetClientByName(Name);
+            Client = await _clientService.GetClientByNameAsync(Name);
             _sessionService.CurrentClient = Client;
 
             if (Client == null)
@@ -122,9 +115,6 @@ namespace DeliveryService.ViewModels
                     CloseRequested?.Invoke();
                     break;
             }
-
-
-
         }
     }
 }

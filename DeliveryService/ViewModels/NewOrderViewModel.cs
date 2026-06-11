@@ -37,7 +37,9 @@ namespace DeliveryService.ViewModels
         /// Номер клиента, "очищенный" от всего, кроме цифр
         /// </summary>
         private string _cleanedPhoneNumber;
-
+        /// <summary>
+        /// Список объектов корзины пользователя
+        /// </summary>
         private List<Basket> _clientBasket;
 
         /// <summary>
@@ -254,6 +256,7 @@ namespace DeliveryService.ViewModels
 
             return true;
         }
+
         /// <summary>
         /// Проверка валидации ClientPhone и "очишение" от не-цифр
         /// </summary>
@@ -285,7 +288,10 @@ namespace DeliveryService.ViewModels
             return true;
         }
 
-
+        /// <summary>
+        /// Создание нового заказа
+        /// </summary>
+        /// <returns></returns>
         private async Task SaveOrderAsync()
         {
             ErrorMessage = null;

@@ -23,7 +23,8 @@ namespace DeliveryService.Repositories
         /// </summary>
         /// <param name="foodId">ID еды</param>
         /// <returns>Еда с указаным id</returns>
-        public async Task<Food?> GetById(int foodId) => await _context.Foods.FindAsync(foodId);
+        public async Task<Food?> GetByIdAsync(int foodId) => await _context.Foods.FindAsync(foodId);
+
         /// <summary>
         /// Получение всей еды
         /// </summary>
@@ -34,6 +35,7 @@ namespace DeliveryService.Repositories
                 .Include(f => f.Categories)
                 .ToListAsync();
         }
+
         /// <summary>
         /// Получение еды по категории
         /// </summary>
@@ -46,6 +48,7 @@ namespace DeliveryService.Repositories
                 .Where(f => f.CategoriesId == categoryId)
                 .ToListAsync();
         }
+
         /// <summary>
         /// Добавление еды
         /// </summary>
@@ -55,6 +58,7 @@ namespace DeliveryService.Repositories
             await _context.Foods.AddAsync(food);
             await _context.SaveChangesAsync();
         }
+
         /// <summary>
         /// Обновление еды в базе данных
         /// </summary>
@@ -64,6 +68,7 @@ namespace DeliveryService.Repositories
             _context.Foods.Update(food);
             await _context.SaveChangesAsync();
         }
+
         /// <summary>
         /// Удаление еды
         /// </summary>

@@ -33,13 +33,13 @@ namespace DeliveryService.Services
         /// Получение всех активных курьеров
         /// </summary>
         /// <returns>Список активных курьеров</returns>
-        public async Task<List<Courier>> GetActiveCouriersAsync() => await _courierRepository.GetActive();
+        public async Task<List<Courier>> GetActiveCouriersAsync() => await _courierRepository.GetActiveAsync();
 
         /// <summary>
         /// Получение всех свободных от заказов курьеров
         /// </summary>
         /// <returns>Список свободных от заказов курьеров</returns>
-        public async Task<List<Courier>> GetFreeCouriersAsync() => await _courierRepository.GetFreeCouriers();
+        public async Task<List<Courier>> GetFreeCouriersAsync() => await _courierRepository.GetFreeCouriersAsync();
 
         /// <summary>
         /// Добавление курьера в базу данных
@@ -84,14 +84,14 @@ namespace DeliveryService.Services
             _logger.LogInformation("Попытка назначения курьера {CourierId} на заказ {OrderId}", courierId, orderId);
             try
             {
-                Courier? courier = await _courierRepository.GetById(courierId);
+                Courier? courier = await _courierRepository.GetByIdAsync(courierId);
                 if (courier == null)
                 {
                     _logger.LogWarning("Курьер {CourierId} не найден.", courierId);
                     return false;
                 }
 
-                Order? order = await _orderRepository.GetById(orderId);
+                Order? order = await _orderRepository.GetByIdAsync(orderId);
                 if (order == null)
                 {
                     _logger.LogWarning("Заказ {OrderId} не найден.", orderId);
@@ -136,7 +136,7 @@ namespace DeliveryService.Services
             _logger.LogInformation("Автоматическое назначение свободного курьера на заказ {OrderId}", order.Id);
             try
             {
-                var freeList = await _courierRepository.GetFreeCouriers();
+                var freeList = await _courierRepository.GetFreeCouriersAsync();
                 if (freeList.Count == 0)
                 {
                     _logger.LogWarning("Нет свободных курьеров для заказа {OrderId}. Заказ остаётся в статусе 'Новый'.", order.Id);
@@ -180,14 +180,14 @@ namespace DeliveryService.Services
             _logger.LogInformation("Переключение онлайн-статуса курьера {CourierId}", courierId);
             try
             {
-                var courier = await _courierRepository.GetById(courierId);
+                var courier = await _courierRepository.GetByIdAsync(courierId);
                 if (courier == null)
                 {
                     _logger.LogWarning("Курьер {CourierId} не найден для переключения статуса.", courierId);
                     return false;
                 }
 
-                await _courierRepository.ToggleOnline(courierId);
+                await _courierRepository.ToggleOnlineAsync(courierId);
                 _logger.LogInformation("Статус курьера {CourierId} успешно изменён.", courierId);
                 return true;
             }
@@ -208,7 +208,7 @@ namespace DeliveryService.Services
             _logger.LogInformation("Удаление курьера {CourierId}", courierId);
             try
             {
-                var courier = await _courierRepository.GetById(courierId);
+                var courier = await _courierRepository.GetByIdAsync(courierId);
                 if (courier == null)
                 {
                     _logger.LogWarning("Курьер {CourierId} не найден для удаления.", courierId);
@@ -236,7 +236,7 @@ namespace DeliveryService.Services
             _logger.LogDebug("Получение курьера по ID {CourierId}", id);
             try
             {
-                return await _courierRepository.GetById(id);
+                return await _courierRepository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {

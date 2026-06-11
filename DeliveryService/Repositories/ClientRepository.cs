@@ -11,10 +11,13 @@ namespace DeliveryService.Repositories
     public class ClientRepository
     {
         private readonly AppDbContext _context;
+
+
         public ClientRepository(AppDbContext context)
         {
             _context = context;
         }
+
 
         /// <summary>
         /// Получение всех клиентов
@@ -26,18 +29,20 @@ namespace DeliveryService.Repositories
                 .Include(o=>o.Orders)
                 .ToListAsync();
         }
+        
         /// <summary>
         /// Получение клиента по id
         /// </summary>
         /// <param name="id">Айди клиента</param>
         /// <returns>Вовзращает клиента с указанным id</returns>
-        public async Task<Client?> GetById(int id) => await _context.Clients.FindAsync(id);
+        public async Task<Client?> GetByIdAsync(int id) => await _context.Clients.FindAsync(id);
+
         /// <summary>
         /// Получение клиента по логину(имени)
         /// </summary>
         /// <param name="name">Логин</param>
         /// <returns></returns>
-        public async Task<Client?> GetByName(string name) => await _context.Clients.FirstOrDefaultAsync(x=>x.Name == name);
+        public async Task<Client?> GetByNameAsync(string name) => await _context.Clients.FirstOrDefaultAsync(x=>x.Name == name);
 
         /// <summary>
         /// Добавление клиента в БД
