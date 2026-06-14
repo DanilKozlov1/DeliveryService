@@ -18,6 +18,7 @@
 | БД | PostgreSQL + Entity Framework Core |
 | Карта | Yandex Maps API |
 | DI | Microsoft.Extensions.DependencyInjection |
+| Логирование | Serilog |
 
 ## Структура проекта
 
